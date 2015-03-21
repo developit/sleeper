@@ -1,0 +1,35 @@
+{
+  "name": "sleeper",
+  "main": "sleeper.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/developit/sleeper",
+  "authors": [
+    "Jason Miller <jason@developit.ca>"
+  ],
+  "description": "A high-level network abstraction that makes working with REST APIs simple.",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "rest",
+    "jan",
+    "frameworkless",
+    "network",
+    "model",
+    "ajax"
+  ],
+  "license": "GPLv3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "frameworkless": "~1.0.3",
+    "jan": "~1.0.2"
+  }
+}

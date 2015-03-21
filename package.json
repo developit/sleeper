@@ -1,0 +1,37 @@
+{
+  "name": "sleeper",
+  "version": "0.1.0",
+  "homepage": "https://github.com/developit/sleeper",
+  "author": "Jason Miller <jason@developit.ca>",
+  "description": "A high-level network abstraction that makes working with REST APIs simple.",
+  "main": "sleeper.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "keywords": [
+    "rest",
+    "jan",
+    "frameworkless",
+    "network",
+    "model",
+    "ajax"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/developit/sleeper.git"
+  },
+  "licence": "GPLv3",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.6.0",
+    "load-grunt-tasks": "^1.0.0",
+    "grunt-contrib-connect": "^0.9.0",
+    "grunt-mocha": "^0.4.11",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "dependencies": {
+    "frameworkless": "^1.0.3",
+    "jan": "^1.0.2"
+  }
+}
