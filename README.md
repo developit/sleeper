@@ -1,6 +1,8 @@
 sleeper [![Version](https://img.shields.io/npm/v/sleeper.svg?style=flat)](https://www.npmjs.org/package/sleeper) ⎔ [![Build Status](https://img.shields.io/travis/developit/sleeper.svg?style=flat&branch=master)](https://travis-ci.org/developit/sleeper)
 =======
 
+[![Join the chat at https://gitter.im/developit/sleeper](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/developit/sleeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A high-level network abstraction that makes working with REST APIs simple.
 
 This is a fork of [puredom-rest](https://github.com/developit/puredom-rest) that replaces the [puredom](https://github.com/developit/puredom)
