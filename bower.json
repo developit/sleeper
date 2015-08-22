@@ -1,7 +1,7 @@
 {
   "name": "sleeper",
   "main": "sleeper.js",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/developit/sleeper",
   "authors": [
     "Jason Miller <jason@developit.ca>"
@@ -28,7 +28,6 @@
     "tests"
   ],
   "dependencies": {
-    "frameworkless": "~1.0.3",
     "jan": "~1.0.2"
   }
 }
