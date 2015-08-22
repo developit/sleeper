@@ -2,3 +2,5 @@ test
 src
 .travis.yml
 README.md
+bower_components
+
