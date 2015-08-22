@@ -22,8 +22,6 @@
 
 		<!-- deps -->
 		<script src="js/jan.js"></script>
-		<script src="js/events.js"></script>
-		<script src="js/util.js"></script>
 
 		<!-- source -->
 		<script src="../sleeper.js"></script>
@@ -31,12 +29,6 @@
 		<!-- tests -->
 		<script src="spec/sleeper.js"></script>
 
-		<script>
-			if (!window.PHANTOMJS && !navigator.userAgent.match(/\bPhantomJS\b/g)) {
-				setTimeout(function() {
-					mocha.run();
-				}, 1);
-			}
-		</script>
+		<script>(window.mochaPhantomJS || mocha).run();</script>
 	</body>
 </html>

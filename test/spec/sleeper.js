@@ -1,3 +1,14 @@
+
+function extend(base) {
+	var args = Array.prototype.slice.call(arguments, 1);
+	for (var i=0; i<args.length; i++) {
+		for (var j in args[i]) if (args[i].hasOwnProperty(j)) {
+			base[j] = args[i][j];
+		}
+	}
+	return base;
+}
+
 describe('sleeper', function() {
 	it('should be a function', function() {
 		expect(sleeper).to.exist;
@@ -22,7 +33,7 @@ describe('sleeper', function() {
 
 
 	// patch for PhantomJS:
-	window.ProgressEvent = function(type, props){ util.extend(this, props); };
+	window.ProgressEvent = function(type, props){ extend(this, props); };
 
 	// CRUD server
 	var server, users;
@@ -173,7 +184,7 @@ describe('sleeper', function() {
 		it('should issue a JSON-encoded PUT request to /:id', function(done) {
 			var api = sleeper('/api/users'),
 				updatedUser = {};
-			updatedUser = util.extend({}, users[0], {
+			updatedUser = extend({}, users[0], {
 				name : 'sheryll',
 				concern : 'Who is this sheryll?'
 			});
