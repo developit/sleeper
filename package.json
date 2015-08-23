@@ -1,6 +1,6 @@
 {
   "name": "sleeper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/developit/sleeper",
   "author": "Jason Miller <jason@developit.ca>",
   "description": "A high-level network abstraction that makes working with REST APIs simple.",

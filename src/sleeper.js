@@ -132,6 +132,7 @@ class Resource extends Emitter {
 			body,
 			rawBody : body
 		};
+		req.request = req;
 
 		let h = options.headers;
 		if (h) for (let i in h) if (HOP.call(h, i)) {
@@ -157,6 +158,7 @@ class Resource extends Emitter {
 		this.emit(`req:${req.relativeUrl}`, req);
 
 		jan(req, (err, res, data) => {
+			req.response = res;
 			res.response = res.data;
 			if (!res.status) err = res.error = 'Connection Error';
 
@@ -168,7 +170,7 @@ class Resource extends Emitter {
 				`res:${req.relativeUrl}`,
 				r,
 				`${r}:${req.relativeUrl}`
-			]).forEach( type => this.emit(type, [req, res]) );
+			]).forEach( type => this.emit(type, req, res) );
 
 			if (typeof callback==='function') {
 				callback(res.error, res.response, res);
