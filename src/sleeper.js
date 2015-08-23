@@ -56,6 +56,7 @@ class Resource extends Emitter {
 		if (typeof key==='string') {
 			if (value===undefined) return this.query[key];
 			this.query[key] = value;
+			if (value===false) delete this.query[key];
 		}
 		if (typeof key==='object') extend(this.query, key);
 		return this;
@@ -67,8 +68,10 @@ class Resource extends Emitter {
 	 */
 	header(header, value=undefined) {
 		if (typeof header==='string') {
+			let key = header.toLowerCase();
 			if (value===undefined) return this.headers[key];
-			this.headers[header.toLowerCase()] = value;
+			this.headers[key] = value;
+			if (value===false) delete this.headers[key];
 		}
 		if (typeof header==='object') {
 			for (let i in header) if (HOP.call(header, i)) {
