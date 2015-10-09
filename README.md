@@ -6,7 +6,7 @@ sleeper [![Version](https://img.shields.io/npm/v/sleeper.svg?style=flat)](https:
 A high-level network abstraction that makes working with REST APIs simple.
 
 This is a fork of [puredom-rest](https://github.com/developit/puredom-rest) that replaces the [puredom](https://github.com/developit/puredom)
-dependency with [jan](https://github.com/synacorinc/jan) and [frameworkless](https://github.com/developit/frameworkless).
+dependency with [jan](https://github.com/synacorinc/jan), a very small browser HTTP lib.
 
 
 ---
