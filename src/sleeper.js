@@ -1,56 +1,65 @@
 import jan from 'jan';
 
-const HOP = Object.prototype.hasOwnProperty;
-
-// let extend = (obj, props) => (Object.keys(props).forEach(k=>obj[k]=props[k]), obj);
-let extend = (obj, props) => {
-	for (let i in props) if (HOP.call(props, i)) obj[i] = props[i];
+function extend (obj, props) {
+	for (const i in props) obj[i] = props[i];
 	return obj;
-};
-
-
-class Emitter {
-	constructor() {
-		this._evt={};
-	}
-	on(type, fn) {
-		(this._evt[type] || (this._evt[type]=[])).push(fn);
-	}
-	removeListener(type, fn) {
-		let e = this._evt[type],
-			i = e && e.indexOf(fn);
-		if (e && i) e.splice(i, 1);
-	}
-	emit(type, ...args) {
-		let e = this._evt[type];
-		if (e) e.slice().forEach(f=>f(...args));
-	}
 }
 
 
-/**	Create a new sleeper Resource, representing one resource type exposed by a RESTful API.
- *	@param {String} [url=/]		The full base URL for the resource (Example: http://a.com/api/users/)
- *	@returns {sleeper.Resource} resource
+/**
+ * Create a new sleeper Resource, representing one resource type exposed by a RESTful API.
+ * @param {string} [url=/] The full base URL for the resource (Example: http://a.com/api/users/)
+ * @returns {sleeper.Resource} resource
  */
-let sleeper = url => new Resource(url);
+const sleeper = url => new Resource(url);
 
 
-/**	Represents a single resource type exposed by a RESTful API.
- *	@constructor Create a representation of a given REST resource.
- *	@augments puredom.EventEmitter
- *	@param {String} [url=/]		The full base URL for the resource (Example: http://a.com/api/users/)
+/**
+ * Represents a single resource type exposed by a RESTful API.
+ * @constructor Create a representation of a given REST resource.
+ * @param {string} [url=/] The full base URL for the resource (ex: http://a.com/api/users/)
  */
-class Resource extends Emitter {
+class Resource {
 	constructor(url) {
-		super();
+		this._evt = {};
 		this.url = url || this.url;
 		this.query = extend({}, this.query);
 		this.headers = extend({}, this.headers);
 	}
 
+	/**
+	 * Listen for an event of a given type.
+	 * @param {string} type The event name to listen for.
+	 * @param {(...any) => void} fn Callback to fire in response to an event.
+	 */
+	on(type, fn) {
+		(this._evt[type] || (this._evt[type]=[])).push(fn);
+	}
+
+	/**
+	 * Remove an event listener with the given type.
+	 * @param {string} type The event name to remove a listener for.
+	 * @param {(...any) => void} fn A reference to the handler function to remove.
+	 */
+	removeListener(type, fn) {
+		let e = this._evt[type],
+			i = e && e.indexOf(fn);
+		if (e && i) e.splice(i, 1);
+	}
+
+	/**
+	 * @private Fire an event with arguments.
+	 * @param {string} type
+	 * @param {any[]} args
+	 */
+	emit(type, ...args) {
+		let e = this._evt[type];
+		if (e) e.slice().forEach(f => f(...args));
+	}
+
 	/**	Get or set global parameters, sent with each request.
-	 *	@param {String} key
-	 *	@param {String} value
+	 *	@param {string|object} key  Pass an object to define multiple key-value query parameter pairs.
+	 *	@param {string|boolean} [value]
 	 */
 	param(key, value=undefined) {
 		if (typeof key==='string') {
@@ -58,13 +67,17 @@ class Resource extends Emitter {
 			this.query[key] = value;
 			if (value===false) delete this.query[key];
 		}
-		if (typeof key==='object') extend(this.query, key);
+		if (typeof key==='object') {
+			for (const i in key) {
+				this.param(i, key[i]);
+			}
+		}
 		return this;
 	}
 
 	/**	Get or set global headers, sent with each request.
-	 *	@param {String} header
-	 *	@param {String} value
+	 *	@param {string|object} header  Pass an object to define multiple key-value header pairs.
+	 *	@param {string|boolean} [value]
 	 */
 	header(header, value=undefined) {
 		if (typeof header==='string') {
@@ -74,7 +87,7 @@ class Resource extends Emitter {
 			if (value===false) delete this.headers[key];
 		}
 		if (typeof header==='object') {
-			for (let i in header) if (HOP.call(header, i)) {
+			for (const i in header) {
 				this.header(i, header[i]);
 			}
 		}
@@ -103,7 +116,7 @@ class Resource extends Emitter {
 	}
 
 	patch(id, obj, callback, options) {
-		return this.put(id, obj, callback, extend({ method:'PATCH' }, options || {}));
+		return this.put(id, obj, callback, extend({ method: 'PATCH' }, options || {}));
 	}
 
 	del(id, callback, options) {
@@ -129,25 +142,25 @@ class Resource extends Emitter {
 			url,
 			path: url,
 			query: extend(extend({}, this.query), options.query || {}),
-			fullUrl : url,
+			fullUrl: url,
 			relativeUrl: url,
 			headers: extend({}, this.headers),
 			body,
-			rawBody : body
+			rawBody: body
 		};
 		req.request = req;
 
 		let h = options.headers;
-		if (h) for (let i in h) if (HOP.call(h, i)) {
+		if (h) for (const key in h) {
 			req.headers[key.toLowerCase()] = h[key];
 		}
 
-		for (let i in req.query) if (HOP.call(req.query, i)) {
-			req.url += (url.indexOf('?')<0?'?':'&') + encodeURIComponent(i) + '=' + encodeURIComponent(req.query[i]);
+		for (const i in req.query) {
+			req.url += (req.url.indexOf('?')<0?'?':'&') + encodeURIComponent(i) + '=' + encodeURIComponent(req.query[i]);
 		}
 
 		req.fullUrl = req.relativeUrl = req.url;
-		req.url = this.url.replace(/(?:^([a-z]+\:\/\/)|(\/)\/+|\/+$)/g, '$1$2') + req.url;
+		req.url = this.url.replace(/(?:^([a-z]+:\/\/)|(\/)\/+|\/+$)/g, '$1$2') + req.url;
 
 		if (options.responseType) {
 			req.responseType = options.responseType;
@@ -160,7 +173,7 @@ class Resource extends Emitter {
 		this.emit('req', req);
 		this.emit(`req:${req.relativeUrl}`, req);
 
-		jan(req, (err, res, data) => {
+		jan(req, (err, res) => {
 			req.response = res;
 			res.response = res.data;
 			if (!res.status) err = res.error = 'Connection Error';
@@ -186,14 +199,24 @@ class Resource extends Emitter {
 
 let proto = Resource.prototype;
 
-extend(proto, {
-	// The resource base URL
+extend(proto, /** @extends Resource.prototype */ {
+
+	/** Base URL for all requests. */
 	url: '/',
-	// Global querystring parameters
+
+	/** Querystring parameters to pass on all requests. */
 	query: {},
-	// Global headers
+
+	/**
+	 * Headers to apply to all requests.
+	 * @type {{[id: string]: string}}
+	 */
 	headers: {},
-	// Used to grab the identifier if you pass an object directly to put()
+
+	/**
+	 * Used to grab the identifier if you pass an object directly to put()
+	 * @type {string}
+	 */
 	idKey: 'id',
 
 	create: proto.post,
@@ -202,8 +225,8 @@ extend(proto, {
 	remove: proto.del
 });
 
+// eslint-disable-next-line
 try { proto['delete'] = proto.del; } catch(err) {}
-
 
 sleeper.sleeper = sleeper.Resource = Resource;
 export default sleeper;

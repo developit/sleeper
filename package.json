@@ -4,15 +4,26 @@
   "homepage": "https://github.com/developit/sleeper",
   "author": "Jason Miller <jason@developit.ca>",
   "description": "A high-level network abstraction that makes working with REST APIs simple.",
-  "main": "sleeper.js",
+  "source": "src/sleeper.js",
+  "module": "dist/sleeper.module.js",
+  "main": "dist/sleeper.js",
+  "umd:main": "dist/sleeper.umd.js",
   "scripts": {
-    "build": "npm run transpile && npm run size",
-    "transpile": "babel src -s -d .",
-    "size": "echo \"gzip size: $(pretty-bytes $(gzip-size sleeper.js))\"",
-    "test": "mocha-phantomjs test/index.html",
-    "prepublish": "npm run build",
+    "build": "microbundle",
+    "test": "karmatic",
+    "prepublish": "npm run -s build",
     "release": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
+  "eslintConfig": {
+    "extends": "developit",
+    "rules": {
+      "no-unused-vars": 1
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "keywords": [
     "rest",
     "jan",
@@ -20,19 +31,19 @@
     "model",
     "ajax"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/developit/sleeper.git"
-  },
+  "repository": "developit/sleeper",
   "licence": "GPLv3",
   "devDependencies": {
-    "babel": "^5.8.21",
-    "gzip-size": "^3.0.0",
-    "mocha-phantomjs": "^3.6.0",
-    "phantomjs": "1.9.7-15",
-    "pretty-bytes": "^2.0.1"
+    "@types/jest": "^24.0.23",
+    "eslint": "^6.6.0",
+    "eslint-config-developit": "^1.1.1",
+    "expect": "^24.9.0",
+    "karmatic": "^1.4.0",
+    "microbundle": "^0.11.0",
+    "sinon": "^7.5.0",
+    "webpack": "^4.41.2"
   },
   "dependencies": {
-    "jan": "^1.0.3"
+    "jan": "^1.1.0"
   }
 }
